@@ -1,0 +1,20 @@
+services:
+  web:
+    image: ruby:2.7
+    working_dir: /app
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command:
+      [
+        "sh", "-ec",
+        "gem install bundler -v 1.17.3 && bundle _1.17.3_ install --no-cache && exec bundle _1.17.3_ exec jekyll serve --host 0.0.0.0 --port 3000 --livereload --watch --force_polling"
+      ]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:3000/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
